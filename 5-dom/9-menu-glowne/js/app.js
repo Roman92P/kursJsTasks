@@ -48,14 +48,34 @@ for(const a of allAEl){
         const targetA = e.currentTarget.getAttribute('href');
         for(const li of allLiEl){
             if(li.firstChild.getAttribute('href')!==targetA){
-                li.classList.add('collased');
+                li.classList.add('collapsed');
             }else{
-                if(li.classList.contains('collased')){
-                li.classList.remove('collased');
+                if(li.classList.contains('collapsed')){
+                li.classList.remove('collapsed');
                 }
             }
         }
         e.currentTarget.parentElement.classList.add('expand');
-    })
+        e.currentTarget.parentElement.addEventListener('transitionend',elementTransitionEnd(e.currentTarget.parentElement));
+        const newCloseBtn = document.createElement('button');
+        newCloseBtn.classList.add('close');
+        newCloseBtn.innerText = 'Zamnkij';
+        e.currentTarget.parentElement.append(newCloseBtn);
+
+        newCloseBtn.addEventListener('click', function(clickedBtn){
+            clickedBtn.stopPropagation();
+            const liToBeClosed = newCloseBtn.closest('li');
+            for(const li of allLiEl){
+                li.classList.remove('expand', 'collapsed');
+            }
+            newCloseBtn.remove();
+        });
+        function showHref(e){
+            console.log(e.firstChild.getAttribute('href'))
+        }
+        function elementTransitionEnd(e){
+            e.removeEventListener('transitionend', showHref(e));
+        }
+    });
 }
 }
